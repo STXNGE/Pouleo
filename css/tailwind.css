@@ -887,3 +887,7 @@ html {
     margin: 0 auto 44px;
   }
 }
+
+:root {
+    color-scheme: only dark;
+}
