@@ -847,5 +847,7 @@ html {
   }
 }
 
-
+html {
+  overflow-x: hidden;
+}
 
