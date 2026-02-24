@@ -854,3 +854,18 @@ html {
 .ticker-inner {
   white-space: nowrap;
 }
+
+@media (max-width: 960px) {
+  .metric-card {
+    overflow: hidden;
+    max-width: 100%;
+  }
+  
+  .metrics-body {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .metric-val {
+    font-size: 22px;
+  }
+}
