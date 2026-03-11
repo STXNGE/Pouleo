@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pouleo — Merci !</title>
+    <link rel="icon" type="image/png" href="assets/pouleo favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- ═══════════════════════════════════════════════════
+         PIXEL / TRACKING — décommentez quand prêt
+         ═══════════════════════════════════════════════════ -->
+    <!--
+    <script>
+      fbq('track', 'Schedule');
+      gtag('event', 'conversion', { 'send_to': 'AW-XXXXXXXX/XXXXXX' });
+    </script>
+    -->
+
+    <style>
+        :root {
+            --bg: #0c0c0e;
+            --bg2: #111114;
+            --surface: #18181d;
+            --surface2: #1f1f26;
+            --white: #f5f5f0;
+            --white2: #ddddd8;
+            --muted: #888890;
+            --muted2: #555560;
+            --border: rgba(255,255,255,0.08);
+            --border2: rgba(255,255,255,0.14);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--white);
+            font-family: 'League Spartan', sans-serif;
+            overflow-x: hidden;
+            cursor: none;
+            min-height: 100vh;
+        }
+
+        /* CURSOR — desktop only */
+        .cursor {
+            position: fixed;
+            width: 28px; height: 28px;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s;
+            font-size: 22px;
+            line-height: 1;
+            filter: invert(1);
+            user-select: none;
+        }
+        .cursor-ring {
+            position: fixed;
+            width: 48px; height: 48px;
+            border: 1.5px solid rgba(255,255,255,0.25);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: all 0.2s ease;
+        }
+        .cursor.hovered { transform: translate(-50%,-50%) scale(1.4) rotate(-20deg); }
+        .cursor-ring.hovered { transform: translate(-50%,-50%) scale(1.5); border-color: rgba(255,255,255,0.5); }
+
+        /* Désactiver curseur custom sur mobile/tactile */
+        @media (hover: none), (pointer: coarse) {
+            body { cursor: auto; }
+            .cursor, .cursor-ring { display: none; }
+        }
+
+        /* NOISE */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            opacity: 0.035;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* DOT GRID */
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
+            background-size: 32px 32px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        nav, main, footer { position: relative; z-index: 1; }
+
+        /* NAV */
+        nav {
+            padding: 24px 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            background: rgba(12,12,14,0.92);
+            backdrop-filter: blur(24px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-badge {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--muted);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            border: 1px solid var(--border2);
+            border-radius: 999px;
+            padding: 5px 14px;
+        }
+
+        /* MAIN */
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 73px - 73px);
+            padding: 80px 24px;
+            text-align: center;
+        }
+
+        /* VIDEO ANIMATION */
+        .logo-video-wrap {
+            margin-bottom: 36px;
+            animation: fadeUp 0.8s 0.1s both;
+        }
+        .logo-video {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            border-radius: 24px;
+        }
+        /* Fallback si le .webm n'est pas encore uploadé */
+        .logo-fallback {
+            width: 120px;
+            height: 120px;
+            border-radius: 24px;
+            background: var(--surface);
+            border: 1.5px solid var(--border2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 52px;
+        }
+
+        /* BADGE */
+        .confirm-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.14);
+            border-radius: 999px;
+            padding: 7px 18px 7px 14px;
+            margin-bottom: 28px;
+            animation: fadeUp 0.7s 0.2s both;
+        }
+        .confirm-dot {
+            width: 7px; height: 7px;
+            background: #4ade80;
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(74, 222, 128, 0.6);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* TITLE */
+        .merci-title {
+            font-size: clamp(48px, 8vw, 100px);
+            font-weight: 900;
+            letter-spacing: -4px;
+            line-height: 0.95;
+            margin-bottom: 24px;
+            animation: fadeUp 0.8s 0.25s both;
+        }
+        .merci-title .hl {
+            color: transparent;
+            -webkit-text-stroke: 2px var(--white);
+        }
+
+        /* SUBTITLE */
+        .merci-sub {
+            font-size: 16px;
+            color: var(--muted);
+            line-height: 1.75;
+            font-weight: 400;
+            max-width: 460px;
+            margin: 0 auto 40px;
+            animation: fadeUp 0.8s 0.35s both;
+        }
+
+        /* INFO CARD */
+        .info-card {
+            background: var(--surface);
+            border: 1.5px solid var(--border2);
+            border-radius: 20px;
+            padding: 28px 36px;
+            max-width: 420px;
+            width: 100%;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+            animation: fadeUp 0.8s 0.45s both;
+        }
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: var(--white);
+            border-radius: 20px 20px 0 0;
+        }
+        .info-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .info-row:last-child { border-bottom: none; padding-bottom: 0; }
+        .info-row:first-child { padding-top: 0; }
+        .info-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+        .info-text { font-size: 14px; font-weight: 600; color: var(--white); line-height: 1.5; }
+        .info-sub { font-size: 12px; color: var(--muted); font-weight: 400; margin-top: 2px; }
+
+        /* BACK LINK */
+        .back-link {
+            margin-top: 28px;
+            font-size: 13px;
+            color: var(--muted);
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+            animation: fadeUp 0.8s 0.55s both;
+        }
+        .back-link:hover { color: var(--white); }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 28px 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .footer-text { font-size: 12px; color: var(--muted); font-weight: 500; }
+
+        @media (max-width: 768px) {
+            nav { padding: 20px 24px; }
+            main { padding: 60px 20px; }
+            footer { flex-direction: column; gap: 12px; text-align: center; padding: 24px; }
+            .info-card { padding: 22px 22px; }
+            .merci-title { letter-spacing: -3px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="cursor" id="cursor"><svg xmlns="http://www.w3.org/2000/svg" viewBox="56 62 263 263" width="16" height="16" style="display:inline-block;vertical-align:middle;"><path fill="currentColor" d="M 130.78125 314.292969 C 150.890625 319.515625 161.886719 311.371094 179.171875 306.589844 C 198.761719 301.101562 211.964844 309.632812 229.34375 309.632812 C 263.285156 309.632812 283.269531 274.835938 276.878906 250.558594 C 269.777344 223.59375 254.402344 223.71875 236.914062 199.859375 C 230.476562 191.078125 222.46875 180.152344 201.460938 172.304688 C 196.425781 170.414062 191.273438 169.457031 186.144531 169.457031 C 163.945312 169.457031 153.914062 184.308594 143.5625 201.863281 C 124.316406 234.5 111.585938 228.679688 103.46875 254.15625 C 96.351562 276.300781 114.550781 310.0625 130.78125 314.292969 Z"/><path fill="currentColor" d="M 232.8125 62.589844 C 218.25 62.589844 197.933594 87.355469 198.503906 118.601562 C 198.417969 136.726562 206.203125 155.503906 224.316406 155.503906 C 249.863281 155.503906 268.175781 116.015625 259.597656 88.246094 C 254.332031 71.195312 240.335938 62.589844 232.8125 62.589844 Z"/><path fill="currentColor" d="M 174.410156 145.292969 C 194.195312 109.15625 165.902344 47.121094 132.347656 61.003906 C 124.457031 64.316406 118.597656 77.238281 115.742188 88.230469 C 113.480469 96.882812 114.15625 106.148438 114.539062 114.113281 C 114.878906 122.082031 120.785156 135.84375 124.699219 141.816406 C 140.417969 165.796875 164.257612 163.777344 174.410156 145.292969 Z"/><path fill="currentColor" d="M 99.148438 218.304688 C 104.566406 218.152344 113.296875 213.738281 117.15625 207.644531 C 132.128906 183.910156 114.113281 136.539062 82.148438 136.539062 C 38.835938 136.539062 53.5 219.605469 99.148438 218.304688 Z"/><path fill="currentColor" d="M 299.902344 138.824219 C 288.898438 133.746094 274.34375 139.511719 265.210938 148.691406 C 245.714844 168.285156 244.898438 208.390625 276.199219 208.390625 C 274.925781 208.390625 285.800781 209.5 298.457031 201.144531 C 324.164062 184.644531 326.332031 150.671875 299.902344 138.824219 Z"/></svg></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+    <a href="index.html" style="display:inline-flex;align-items:center;height:28px;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 74.999997" height="28" preserveAspectRatio="xMidYMid meet">
+            <path fill="#ffffff" d="M 2.152344 22.324219 L 16.996094 22.324219 C 21.140625 22.324219 24.492188 23.394531 27.054688 25.527344 C 29.628906 27.667969 30.914062 30.773438 30.914062 34.855469 C 30.914062 38.933594 29.609375 42.132812 27.003906 44.453125 C 24.40625 46.773438 21.074219 47.933594 16.996094 47.933594 L 11.421875 47.933594 L 11.421875 63.03125 L 2.152344 63.03125 Z M 11.421875 40.527344 L 14.046875 40.527344 C 16.113281 40.527344 17.808594 40.113281 19.136719 39.277344 C 20.472656 38.433594 21.140625 37.054688 21.140625 35.144531 C 21.140625 33.214844 20.472656 31.832031 19.136719 30.996094 C 17.808594 30.152344 16.113281 29.730469 14.046875 29.730469 Z"/>
+            <path fill="#ffffff" d="M 37.394531 60.03125 C 34.582031 57.53125 33.175781 54.320312 33.175781 50.398438 C 33.175781 46.484375 34.636719 43.265625 37.566406 40.75 C 40.5 38.238281 44.121094 36.980469 48.429688 36.980469 C 52.667969 36.980469 56.246094 38.246094 59.160156 40.785156 C 62.074219 43.3125 63.53125 46.519531 63.53125 50.398438 C 63.53125 54.285156 62.109375 57.488281 59.265625 60 C 56.417969 62.515625 52.808594 63.769531 48.429688 63.769531 C 43.894531 63.769531 40.210938 62.527344 37.394531 60.03125 Z M 44.144531 46.113281 C 43.015625 47.226562 42.449219 48.652344 42.449219 50.398438 C 42.449219 52.148438 42.988281 53.570312 44.078125 54.667969 C 45.160156 55.765625 46.597656 56.3125 48.378906 56.3125 C 50.09375 56.3125 51.5 55.761719 52.597656 54.652344 C 53.703125 53.53125 54.257812 52.113281 54.257812 50.398438 C 54.257812 48.652344 53.683594 47.226562 52.546875 46.113281 C 51.414062 44.996094 50.027344 44.433594 48.378906 44.433594 C 46.699219 44.433594 45.285156 44.996094 44.144531 46.113281 Z"/>
+            <path fill="#ffffff" d="M 75.867188 37.714844 L 75.867188 49.765625 C 75.867188 52.261719 76.246094 54.035156 77 55.097656 C 77.753906 56.152344 79.03125 56.671875 80.839844 56.671875 C 82.65625 56.671875 83.941406 56.152344 84.695312 55.097656 C 85.449219 54.035156 85.828125 52.261719 85.828125 49.765625 L 85.828125 37.714844 L 94.570312 37.714844 L 94.570312 51.875 C 94.570312 56.089844 93.472656 59.132812 91.277344 60.992188 C 89.09375 62.84375 85.613281 63.769531 80.839844 63.769531 C 76.074219 63.769531 72.59375 62.84375 70.402344 60.992188 C 68.214844 59.132812 67.125 56.089844 67.125 51.875 Z"/>
+            <path fill="#ffffff" d="M 99.992188 20.59375 L 108.714844 20.59375 L 108.714844 63.03125 L 99.992188 63.03125 Z"/>
+            <path fill="#ffffff" d="M 140.253906 51.582031 L 121.894531 51.582031 C 121.894531 53.367188 122.464844 54.683594 123.609375 55.542969 C 124.761719 56.390625 126.015625 56.8125 127.378906 56.8125 C 128.785156 56.8125 129.898438 56.621094 130.722656 56.246094 C 131.542969 55.867188 132.480469 55.121094 133.53125 54 L 139.859375 57.152344 C 137.226562 61.566406 132.851562 63.769531 126.726562 63.769531 C 122.910156 63.769531 119.636719 62.460938 116.90625 59.84375 C 114.171875 57.230469 112.808594 54.082031 112.808594 50.398438 C 112.808594 46.722656 114.171875 43.570312 116.90625 40.9375 C 119.636719 38.300781 122.910156 36.980469 126.726562 36.980469 C 130.738281 36.980469 134 38.140625 136.515625 40.457031 C 139.039062 42.78125 140.304688 46.09375 140.304688 50.398438 C 140.304688 50.996094 140.285156 51.390625 140.253906 51.582031 Z M 122.132812 46.75 L 131.765625 46.75 C 131.5625 45.4375 131.039062 44.425781 130.207031 43.714844 C 129.371094 43.007812 128.292969 42.652344 126.96875 42.652344 C 125.527344 42.652344 124.378906 43.03125 123.523438 43.785156 C 122.664062 44.539062 122.203125 45.527344 122.132812 46.75 Z"/>
+            <path fill="#ffffff" d="M 146.777344 60.03125 C 143.96875 57.53125 142.5625 54.320312 142.5625 50.398438 C 142.5625 46.484375 144.023438 43.265625 146.949219 40.75 C 149.886719 38.238281 153.507812 36.980469 157.816406 36.980469 C 162.054688 36.980469 165.632812 38.246094 168.546875 40.785156 C 171.460938 43.3125 172.917969 46.519531 172.917969 50.398438 C 172.917969 54.285156 171.496094 57.488281 168.648438 60 C 165.804688 62.515625 162.191406 63.769531 157.816406 63.769531 C 153.277344 63.769531 149.597656 62.527344 146.777344 60.03125 Z M 153.53125 46.113281 C 152.398438 47.226562 151.835938 48.652344 151.835938 50.398438 C 151.835938 52.148438 152.375 53.570312 153.464844 54.667969 C 154.546875 55.765625 155.984375 56.3125 157.765625 56.3125 C 159.480469 56.3125 160.886719 55.761719 161.980469 54.652344 C 163.085938 53.53125 163.644531 52.113281 163.644531 50.398438 C 163.644531 48.652344 163.070312 47.226562 161.929688 46.113281 C 160.800781 44.996094 159.410156 44.433594 157.765625 44.433594 C 156.085938 44.433594 154.671875 44.996094 153.53125 46.113281 Z"/>
+        </svg>
+    </a>
+    <span class="nav-badge">Réservation confirmée</span>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main>
+
+    <!-- LOGO WEBM ANIMATION EN LOOP -->
+    <div class="logo-video-wrap">
+        <video class="logo-video" autoplay loop muted playsinline id="logoVideo" style="display:none;">
+            <source src="assets/logo-anim.webm" type="video/webm">
+        </video>
+        <div class="logo-fallback" id="logoFallback"><svg xmlns="http://www.w3.org/2000/svg" viewBox="56 62 263 263" width="16" height="16" style="display:inline-block;vertical-align:middle;"><path fill="currentColor" d="M 130.78125 314.292969 C 150.890625 319.515625 161.886719 311.371094 179.171875 306.589844 C 198.761719 301.101562 211.964844 309.632812 229.34375 309.632812 C 263.285156 309.632812 283.269531 274.835938 276.878906 250.558594 C 269.777344 223.59375 254.402344 223.71875 236.914062 199.859375 C 230.476562 191.078125 222.46875 180.152344 201.460938 172.304688 C 196.425781 170.414062 191.273438 169.457031 186.144531 169.457031 C 163.945312 169.457031 153.914062 184.308594 143.5625 201.863281 C 124.316406 234.5 111.585938 228.679688 103.46875 254.15625 C 96.351562 276.300781 114.550781 310.0625 130.78125 314.292969 Z"/><path fill="currentColor" d="M 232.8125 62.589844 C 218.25 62.589844 197.933594 87.355469 198.503906 118.601562 C 198.417969 136.726562 206.203125 155.503906 224.316406 155.503906 C 249.863281 155.503906 268.175781 116.015625 259.597656 88.246094 C 254.332031 71.195312 240.335938 62.589844 232.8125 62.589844 Z"/><path fill="currentColor" d="M 174.410156 145.292969 C 194.195312 109.15625 165.902344 47.121094 132.347656 61.003906 C 124.457031 64.316406 118.597656 77.238281 115.742188 88.230469 C 113.480469 96.882812 114.15625 106.148438 114.539062 114.113281 C 114.878906 122.082031 120.785156 135.84375 124.699219 141.816406 C 140.417969 165.796875 164.257612 163.777344 174.410156 145.292969 Z"/><path fill="currentColor" d="M 99.148438 218.304688 C 104.566406 218.152344 113.296875 213.738281 117.15625 207.644531 C 132.128906 183.910156 114.113281 136.539062 82.148438 136.539062 C 38.835938 136.539062 53.5 219.605469 99.148438 218.304688 Z"/><path fill="currentColor" d="M 299.902344 138.824219 C 288.898438 133.746094 274.34375 139.511719 265.210938 148.691406 C 245.714844 168.285156 244.898438 208.390625 276.199219 208.390625 C 274.925781 208.390625 285.800781 209.5 298.457031 201.144531 C 324.164062 184.644531 326.332031 150.671875 299.902344 138.824219 Z"/></svg></div>
+    </div>
+
+    <!-- BADGE -->
+    <div class="confirm-badge">
+        <div class="confirm-dot"></div>
+        Demande reçue
+    </div>
+
+    <!-- TITLE -->
+    <h1 class="merci-title">
+        C'est <span class="hl">tout</span><br>bon !
+    </h1>
+
+    <!-- SUBTITLE -->
+    <p class="merci-sub">
+        Votre demande a bien été reçue. Un lien de confirmation vous sera envoyé par courriel sous peu avec tous les détails de votre appel.
+    </p>
+
+    <!-- INFO CARD -->
+    <div class="info-card">
+        <div class="info-row">
+            <span class="info-icon">📧</span>
+            <div>
+                <div class="info-text">Confirmation par courriel</div>
+                <div class="info-sub">Vérifiez votre boîte de réception — un lien d'appel vous sera envoyé.</div>
+            </div>
+        </div>
+        <div class="info-row">
+            <span class="info-icon">📞</span>
+            <div>
+                <div class="info-text">Appel de 30 min</div>
+                <div class="info-sub">Analyse de votre marché, vos objectifs, votre compétition. Pas de pitch agressif.</div>
+            </div>
+        </div>
+        <div class="info-row">
+            <span class="info-icon">🔒</span>
+            <div>
+                <div class="info-text">100% gratuit, sans engagement</div>
+                <div class="info-sub">Si on n'est pas le bon fit, on vous le dit directement.</div>
+            </div>
+        </div>
+    </div>
+
+    <a href="reserver.html" class="back-link">← Retour</a>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+    <div style="display:inline-flex;align-items:center;height:22px;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 74.999997" height="22" preserveAspectRatio="xMidYMid meet">
+            <path fill="#555560" d="M 2.152344 22.324219 L 16.996094 22.324219 C 21.140625 22.324219 24.492188 23.394531 27.054688 25.527344 C 29.628906 27.667969 30.914062 30.773438 30.914062 34.855469 C 30.914062 38.933594 29.609375 42.132812 27.003906 44.453125 C 24.40625 46.773438 21.074219 47.933594 16.996094 47.933594 L 11.421875 47.933594 L 11.421875 63.03125 L 2.152344 63.03125 Z M 11.421875 40.527344 L 14.046875 40.527344 C 16.113281 40.527344 17.808594 40.113281 19.136719 39.277344 C 20.472656 38.433594 21.140625 37.054688 21.140625 35.144531 C 21.140625 33.214844 20.472656 31.832031 19.136719 30.996094 C 17.808594 30.152344 16.113281 29.730469 14.046875 29.730469 Z"/>
+        </svg>
+    </div>
+    <div class="footer-text">© 2025 Pouleo — Agence Marketing spécialisée Construction</div>
+    <div class="footer-text">Montréal, QC</div>
+</footer>
+
+<script>
+    // ─── CURSOR (desktop only) ─────────────────────────────
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+    document.addEventListener('mousemove', e => {
+        mouseX = e.clientX; mouseY = e.clientY;
+        cursor.style.left = mouseX + 'px';
+        cursor.style.top = mouseY + 'px';
+    });
+    function animateRing() {
+        ringX += (mouseX - ringX) * 0.12;
+        ringY += (mouseY - ringY) * 0.12;
+        ring.style.left = ringX + 'px';
+        ring.style.top = ringY + 'px';
+        requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    document.querySelectorAll('a, .info-row').forEach(el => {
+        el.addEventListener('mouseenter', () => { cursor.classList.add('hovered'); ring.classList.add('hovered'); });
+        el.addEventListener('mouseleave', () => { cursor.classList.remove('hovered'); ring.classList.remove('hovered'); });
+    });
+
+    // ─── VIDEO FALLBACK ────────────────────────────────────
+    // Affiche la vidéo si elle charge, sinon garde le fallback emoji
+    const video = document.getElementById('logoVideo');
+    const fallback = document.getElementById('logoFallback');
+    video.addEventListener('canplay', () => {
+        video.style.display = 'block';
+        fallback.style.display = 'none';
+    });
+    video.load();
+</script>
+</body>
+</html>
