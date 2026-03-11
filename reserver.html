@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -1280,6 +1278,14 @@
         const contexte   = document.getElementById('contexte').value.trim();
 
         const fullName = prenom + ' ' + nom;
+
+        // Envoyer les données au Google Sheet
+        fetch('https://script.google.com/macros/s/AKfycby9RuwclJ5A6BeMqhwdayiX7U1fEMI-XCqWF1rlGZpK0Qarz2ll6FNmAYV3VFpdNu5o/exec', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prenom, nom, email, entreprise, telephone, defi, budget, contexte }),
+            mode: 'no-cors'
+        }).catch(err => console.error('Sheet error:', err));
 
         // Show step 3 in card
         document.getElementById('panel2').classList.remove('active');
