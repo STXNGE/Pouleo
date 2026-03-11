@@ -773,10 +773,12 @@
             .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
             .process-steps { grid-template-columns: 1fr 1fr; }
             .process-line { display: none; }
-            footer { flex-direction: column; gap: 16px; text-align: center; }
+            footer { flex-direction: column; gap: 16px; text-align: center; padding: 32px 24px; }
             .form-row { grid-template-columns: 1fr; }
             .hero-trust { flex-wrap: wrap; gap: 12px; }
             #calendlySection { padding: 60px 24px; }
+            /* Calendly mobile : compense le padding réduit (24px au lieu de 32px) */
+            #calendlyEmbed3 { margin: 0 -24px -28px !important; }
         }
 
         /* CALENDLY EMBED FIX */
@@ -1133,7 +1135,10 @@
         <img alt="Pouleo" src="assets/Design sans titre (6).svg" style="height:28px;display:block;">
     </div>
     <div class="footer-text">© 2025 Pouleo — Agence Marketing spécialisée Construction</div>
-    <div class="footer-text">Montréal, QC</div>
+    <div class="footer-text" style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+        <span>Montréal, QC</span>
+        <a href="https://pouleo.com/legal" style="font-size:11px;color:var(--muted2);text-decoration:underline;text-underline-offset:3px;letter-spacing:0.04em;transition:color 0.2s;" onmouseover="this.style.color='var(--muted)'" onmouseout="this.style.color='var(--muted2)'">Politique de confidentialité &amp; Conditions d'utilisation</a>
+    </div>
 </footer>
 
 <script>
@@ -1314,6 +1319,13 @@
         document.getElementById('prenomConfirm').textContent = prenom;
         setStep(3);
         btn.classList.remove('loading');
+        // Sur mobile : scroll vers le haut du form card pour que Calendly soit visible
+        setTimeout(() => {
+            const card = document.querySelector('.form-card');
+            if (card && window.innerWidth < 900) {
+                card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }, 100);
 
         // Load Calendly with prefill using official API
         function initCalendly(retries) {
