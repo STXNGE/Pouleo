@@ -1316,7 +1316,14 @@
             widget.style.height   = '660px';
             embed.appendChild(widget);
 
-            if(window.Calendly) Calendly.initInlineWidgets();
+            function tryInitCalendly(retries) {
+    if (window.Calendly) {
+        Calendly.initInlineWidgets();
+    } else if (retries > 0) {
+        setTimeout(() => tryInitCalendly(retries - 1), 300);
+    }
+}
+tryInitCalendly(10);
         }, 800);
 
         // ══════════════════════════════════
