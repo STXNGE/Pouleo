@@ -1280,21 +1280,7 @@
 
         const fullName = prenom + ' ' + nom;
 
-        const params = new URLSearchParams({
-            name: fullName,
-            email: email,
-            a1: entreprise,
-            a2: telephone,
-            a3: defi,
-            a4: budget,
-            a5: contexte || '',
-            hide_gdpr_banner: '1',
-            background_color: '18181d',
-            text_color: 'f5f5f0',
-            primary_color: 'f5f5f0'
-        });
-        const calendlyUrl = `https://calendly.com/thomas-pouleo/30min?${params.toString()}`;
-
+        const calendlyUrl = `https://calendly.com/thomas-pouleo/30min?hide_event_type_details=1&hide_gdpr_banner=1&name=${encodeURIComponent(fullName)}&email=${encodeURIComponent(email)}`;
         // Show step 3 in card
         document.getElementById('panel2').classList.remove('active');
         document.getElementById('panel3').classList.add('active');
