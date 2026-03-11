@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Politique de confidentialité & Conditions d'utilisation — Pouleo</title>
+    <link rel="icon" type="image/png" href="assets/pouleo favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0c0c0e;
+            --bg2: #111114;
+            --surface: #18181d;
+            --surface2: #1f1f26;
+            --white: #f5f5f0;
+            --white2: #ddddd8;
+            --muted: #888890;
+            --muted2: #555560;
+            --border: rgba(255,255,255,0.08);
+            --border2: rgba(255,255,255,0.14);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--white);
+            font-family: 'League Spartan', sans-serif;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* CURSOR */
+        .cursor {
+            position: fixed;
+            width: 28px; height: 28px;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s;
+            font-size: 22px;
+            line-height: 1;
+            color: white;
+            user-select: none;
+        }
+        .cursor-ring {
+            position: fixed;
+            width: 48px; height: 48px;
+            border: 1.5px solid rgba(255,255,255,0.25);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: all 0.2s ease;
+        }
+        .cursor.hovered { transform: translate(-50%,-50%) scale(1.4) rotate(-20deg); }
+        .cursor-ring.hovered { transform: translate(-50%,-50%) scale(1.5); border-color: rgba(255,255,255,0.5); }
+
+        @media (hover: none), (pointer: coarse) {
+            body { cursor: auto; }
+            .cursor, .cursor-ring { display: none; }
+        }
+
+        /* NOISE */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            opacity: 0.035;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* DOT GRID */
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
+            background-size: 32px 32px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            padding: 28px 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.4s;
+        }
+        nav.scrolled {
+            background: rgba(12,12,14,0.92);
+            backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 64px;
+        }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .nav-badge {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--muted);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            border: 1px solid var(--border2);
+            border-radius: 999px;
+            padding: 5px 14px;
+        }
+        .nav-back {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--muted);
+            text-decoration: none;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.2s;
+        }
+        .nav-back:hover { color: var(--white); }
+
+        /* WRAPPER */
+        .wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 140px 64px 100px;
+        }
+
+        /* TOC TABS */
+        .toc {
+            display: flex;
+            gap: 0;
+            border: 1.5px solid var(--border2);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 64px;
+            animation: fade 0.8s 0.1s both;
+        }
+        .toc-btn {
+            flex: 1;
+            padding: 18px 24px;
+            background: transparent;
+            border: none;
+            color: var(--muted);
+            font-family: 'League Spartan', sans-serif;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.25s;
+            position: relative;
+        }
+        .toc-btn + .toc-btn {
+            border-left: 1.5px solid var(--border2);
+        }
+        .toc-btn.active {
+            background: var(--surface2);
+            color: var(--white);
+        }
+        .toc-btn:hover:not(.active) {
+            background: var(--surface);
+            color: var(--white2);
+        }
+
+        /* PAGE HEADER */
+        .page-header {
+            margin-bottom: 72px;
+            animation: fade 0.8s 0.05s both;
+        }
+        .page-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 24px;
+            border: 1px solid var(--border2);
+            border-radius: 999px;
+            padding: 6px 16px;
+        }
+        .page-title {
+            font-size: clamp(36px, 5vw, 64px);
+            font-weight: 900;
+            letter-spacing: -2px;
+            line-height: 0.97;
+            color: var(--white);
+            margin-bottom: 20px;
+        }
+        .page-title .dim { color: var(--muted); }
+        .page-subtitle {
+            font-size: 14px;
+            color: var(--muted);
+            font-weight: 400;
+            line-height: 1.7;
+            max-width: 520px;
+        }
+        .page-meta {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .meta-item {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--muted2);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .meta-dot {
+            width: 5px; height: 5px;
+            border-radius: 50%;
+            background: var(--muted2);
+        }
+
+        /* SECTIONS */
+        .legal-section {
+            display: none;
+        }
+        .legal-section.active {
+            display: block;
+            animation: fade 0.5s both;
+        }
+
+        @keyframes fade {
+            from { opacity: 0; transform: translateY(14px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ARTICLE BLOCKS */
+        .article {
+            margin-bottom: 48px;
+            padding-bottom: 48px;
+            border-bottom: 1px solid var(--border);
+        }
+        .article:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        .article-num {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--muted2);
+            margin-bottom: 12px;
+        }
+        .article-title {
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            color: var(--white);
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+        .article-body {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--muted);
+            line-height: 1.85;
+            max-width: 680px;
+        }
+        .article-body p {
+            margin-bottom: 16px;
+        }
+        .article-body p:last-child {
+            margin-bottom: 0;
+        }
+        .article-body strong {
+            color: var(--white2);
+            font-weight: 700;
+        }
+        .article-body ul {
+            margin: 16px 0;
+            padding-left: 0;
+            list-style: none;
+        }
+        .article-body ul li {
+            padding: 8px 0 8px 24px;
+            position: relative;
+            border-bottom: 1px solid var(--border);
+        }
+        .article-body ul li:last-child {
+            border-bottom: none;
+        }
+        .article-body ul li::before {
+            content: '—';
+            position: absolute;
+            left: 0;
+            color: var(--muted2);
+            font-weight: 700;
+        }
+        .article-body a {
+            color: var(--white);
+            text-underline-offset: 4px;
+        }
+        .article-body a:hover {
+            color: var(--white2);
+        }
+
+        /* HIGHLIGHT BOX */
+        .highlight-box {
+            background: var(--surface);
+            border: 1.5px solid var(--border2);
+            border-radius: 16px;
+            padding: 24px 28px;
+            margin: 24px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .highlight-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: var(--white);
+            border-radius: 16px 16px 0 0;
+        }
+        .highlight-box-title {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--white);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .highlight-box-text {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.75;
+            font-weight: 400;
+        }
+
+        /* CONTACT CARD */
+        .contact-card {
+            background: var(--surface2);
+            border: 1.5px solid var(--border2);
+            border-radius: 20px;
+            padding: 32px;
+            margin-top: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+        .contact-card-info {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.75;
+        }
+        .contact-card-info strong {
+            display: block;
+            font-size: 16px;
+            font-weight: 900;
+            color: var(--white);
+            letter-spacing: -0.3px;
+            margin-bottom: 4px;
+        }
+        .contact-btn {
+            flex-shrink: 0;
+            padding: 13px 28px;
+            background: var(--white);
+            color: #0c0c0e;
+            font-family: 'League Spartan', sans-serif;
+            font-size: 13px;
+            font-weight: 800;
+            border: none;
+            border-radius: 999px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s;
+            letter-spacing: 0.02em;
+        }
+        .contact-btn:hover {
+            background: transparent;
+            color: var(--white);
+            border: 1px solid var(--white);
+            transform: translateY(-2px);
+        }
+
+        /* FOOTER */
+        footer {
+            position: relative;
+            z-index: 1;
+            border-top: 1px solid var(--border);
+            padding: 36px 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .footer-text { font-size: 12px; color: var(--muted); font-weight: 500; }
+
+        @media (max-width: 900px) {
+            nav { padding: 20px 24px; }
+            nav.scrolled { padding: 14px 24px; }
+            .wrapper { padding: 120px 24px 80px; }
+            footer { flex-direction: column; gap: 16px; text-align: center; padding: 36px 24px; }
+            .toc { flex-direction: column; }
+            .toc-btn + .toc-btn { border-left: none; border-top: 1.5px solid var(--border2); }
+            .contact-card { flex-direction: column; }
+            .page-meta { flex-wrap: wrap; gap: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="cursor" id="cursor"><svg xmlns="http://www.w3.org/2000/svg" viewBox="56 62 263 263" width="16" height="16" style="display:inline-block;vertical-align:middle;flex-shrink:0;"><path fill="currentColor" d="M 130.78125 314.292969 C 150.890625 319.515625 161.886719 311.371094 179.171875 306.589844 C 198.761719 301.101562 211.964844 309.632812 229.34375 309.632812 C 263.285156 309.632812 283.269531 274.835938 276.878906 250.558594 C 269.777344 223.59375 254.402344 223.71875 236.914062 199.859375 C 230.476562 191.078125 222.46875 180.152344 201.460938 172.304688 C 196.425781 170.414062 191.273438 169.457031 186.144531 169.457031 C 163.945312 169.457031 153.914062 184.308594 143.5625 201.863281 C 124.316406 234.5 111.585938 228.679688 103.46875 254.15625 C 96.351562 276.300781 114.550781 310.0625 130.78125 314.292969 Z"/><path fill="currentColor" d="M 232.8125 62.589844 C 218.25 62.589844 197.933594 87.355469 198.503906 118.601562 C 198.417969 136.726562 206.203125 155.503906 224.316406 155.503906 C 249.863281 155.503906 268.175781 116.015625 259.597656 88.246094 C 254.332031 71.195312 240.335938 62.589844 232.8125 62.589844 Z"/><path fill="currentColor" d="M 174.410156 145.292969 C 194.195312 109.15625 165.902344 47.121094 132.347656 61.003906 C 124.457031 64.316406 118.597656 77.238281 115.742188 88.230469 C 113.480469 96.882812 114.15625 106.148438 114.539062 114.113281 C 114.878906 122.082031 120.785156 135.84375 124.699219 141.816406 C 140.417969 165.796875 164.257812 163.777344 174.410156 145.292969 Z"/><path fill="currentColor" d="M 99.148438 218.304688 C 104.566406 218.152344 113.296875 213.738281 117.15625 207.644531 C 132.128906 183.910156 114.113281 136.539062 82.148438 136.539062 C 38.835938 136.539062 53.5 219.605469 99.148438 218.304688 Z"/><path fill="currentColor" d="M 299.902344 138.824219 C 288.898438 133.746094 274.34375 139.511719 265.210938 148.691406 C 245.714844 168.285156 244.898438 208.390625 276.199219 208.390625 C 274.925781 208.390625 285.800781 209.5 298.457031 201.144531 C 324.164062 184.644531 326.332031 150.671875 299.902344 138.824219 Z"/></svg></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+    <a class="nav-logo" href="reserver.html">
+        <img alt="Pouleo" src="assets/Design sans titre (6).svg" style="height:32px;display:block;">
+    </a>
+    <a class="nav-back" href="reserver.html">← Retour</a>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div class="wrapper">
+
+    <div class="page-header">
+        <div class="page-tag">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="56 62 263 263" width="12" height="12" style="display:inline-block;vertical-align:middle;opacity:0.6;"><path fill="currentColor" d="M 130.78125 314.292969 C 150.890625 319.515625 161.886719 311.371094 179.171875 306.589844 C 198.761719 301.101562 211.964844 309.632812 229.34375 309.632812 C 263.285156 309.632812 283.269531 274.835938 276.878906 250.558594 C 269.777344 223.59375 254.402344 223.71875 236.914062 199.859375 C 230.476562 191.078125 222.46875 180.152344 201.460938 172.304688 C 196.425781 170.414062 191.273438 169.457031 186.144531 169.457031 C 163.945312 169.457031 153.914062 184.308594 143.5625 201.863281 C 124.316406 234.5 111.585938 228.679688 103.46875 254.15625 C 96.351562 276.300781 114.550781 310.0625 130.78125 314.292969 Z"/><path fill="currentColor" d="M 232.8125 62.589844 C 218.25 62.589844 197.933594 87.355469 198.503906 118.601562 C 198.417969 136.726562 206.203125 155.503906 224.316406 155.503906 C 249.863281 155.503906 268.175781 116.015625 259.597656 88.246094 C 254.332031 71.195312 240.335938 62.589844 232.8125 62.589844 Z"/><path fill="currentColor" d="M 174.410156 145.292969 C 194.195312 109.15625 165.902344 47.121094 132.347656 61.003906 C 124.457031 64.316406 118.597656 77.238281 115.742188 88.230469 C 113.480469 96.882812 114.15625 106.148438 114.539062 114.113281 C 114.878906 122.082031 120.785156 135.84375 124.699219 141.816406 C 140.417969 165.796875 164.257812 163.777344 174.410156 145.292969 Z"/><path fill="currentColor" d="M 99.148438 218.304688 C 104.566406 218.152344 113.296875 213.738281 117.15625 207.644531 C 132.128906 183.910156 114.113281 136.539062 82.148438 136.539062 C 38.835938 136.539062 53.5 219.605469 99.148438 218.304688 Z"/><path fill="currentColor" d="M 299.902344 138.824219 C 288.898438 133.746094 274.34375 139.511719 265.210938 148.691406 C 245.714844 168.285156 244.898438 208.390625 276.199219 208.390625 C 274.925781 208.390625 285.800781 209.5 298.457031 201.144531 C 324.164062 184.644531 326.332031 150.671875 299.902344 138.824219 Z"/></svg>
+            Documents légaux
+        </div>
+        <h1 class="page-title">Politique &amp; <span class="dim">Conditions</span></h1>
+        <p class="page-subtitle">Tout ce que vous devez savoir sur l'utilisation de nos services et la gestion de vos données personnelles, conformément à la Loi 25 du Québec.</p>
+        <div class="page-meta">
+            <div class="meta-item"><div class="meta-dot"></div> Dernière mise à jour : juin 2025</div>
+            <div class="meta-item"><div class="meta-dot"></div> Juridiction : Québec, Canada</div>
+            <div class="meta-item"><div class="meta-dot"></div> Loi 25 conforme</div>
+        </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="toc">
+        <button class="toc-btn active" onclick="showSection('confidentialite', this)">🔒 Politique de confidentialité</button>
+        <button class="toc-btn" onclick="showSection('conditions', this)">📋 Conditions d'utilisation</button>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- POLITIQUE DE CONFIDENTIALITÉ                        -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div class="legal-section active" id="confidentialite">
+
+        <div class="article">
+            <div class="article-num">Article 1</div>
+            <div class="article-title">Qui sommes-nous</div>
+            <div class="article-body">
+                <p>La présente politique de confidentialité est émise par <strong>Pouleo</strong>, agence de marketing spécialisée dans l'industrie de la construction, dont les services sont offerts aux entreprises situées principalement au Québec et au Canada.</p>
+                <p>Pour toute question relative à vos données personnelles, vous pouvez nous joindre à l'adresse : <a href="mailto:thomas@pouleo.com">thomas@pouleo.com</a></p>
+            </div>
+        </div>
+
+        <div class="article">
+            <div class="article-num">Article 2</div>
+            <div class="article-title">Quelles données nous collectons</div>
+            <div class="article-body">
+                <p>Lorsque vous remplissez le formulaire de réservation sur notre site, nous collectons les informations suivantes :</p>
+                <ul>
+                    <li>Prénom et nom</li>
+                    <li>Adresse courriel professionnelle</li>
+                    <li>Numéro de téléphone</li>
+                    <li>Nom de l'entreprise</li>
+                    <li>Informations sur votre défi marketing et votre budget estimé</li>
+                    <li>Tout contexte supplémentaire que vous choisissez de partager</li>
+                </ul>
+                <p>Nous collectons également des données de navigation de manière agrégée et anonymisée via des outils d'analyse (Google Analytics), sous réserve de votre consentement préalable.</p>
+            </div>
+        </div>
+
+        <div class="article">
+            <div class="article-num">Article 3</div>
+            <div class="article-title">Pourquoi nous utilisons vos données</div>
+            <div class="article-body">
+                <p>Vos informations personnelles sont utilisées exclusivement aux fins suivantes :</p>
+                <ul>
+                    <li>Organiser et confirmer votre appel stratégique</li>
+                    <li>Vous envoyer les informations relatives à votre rendez-vous</li>
+                    <li>Préparer l'appel en comprenant votre contexte d'affaires</li>
+                    <li>Vous contacter dans le suivi de notre conversation, si pertinent</li>
+                </ul>
+                <div class="highlight-box">
+                    <div class="highlight-box-title">⚡ Ce que nous ne faisons PAS</div>
+                    <div class="highlight-box-text">Nous ne <strong>vendons</strong> jamais vos données à des tiers. Nous ne vous inscrivons pas à des listes de diffusion sans votre consentement explicite. En revanche, nous utilisons des outils publicitaires (Google Ads, Meta Pixel) qui peuvent recevoir certaines données de navigation anonymisées à des fins d'optimisation de campagnes — uniquement avec votre consentement préalable via notre bannière de cookies.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="article">
+            <div class="article-num">Article 4</div>
+            <div class="article-title">Avec qui vos données sont partagées</div>
+            <div class="article-body">
+                <p>Dans le cadre de nos opérations, vos données peuvent transiter par les services suivants :</p>
+                <ul>
+                    <li><strong>Calendly</strong> — Pour la gestion des rendez-vous (hébergé aux États-Unis, soumis aux lois applicables sur la protection des données)</li>
+                    <li><strong>Google Sheets / Google Workspace</strong> — Pour le stockage sécurisé des informations collectées via le formulaire</li>
+                    <li><strong>Google Analytics</strong> — Pour l'analyse de navigation anonymisée, uniquement avec votre consentement</li>
+                    <li><strong>Google Ads (Google Tag)</strong> — Pour mesurer les conversions et optimiser nos campagnes publicitaires, uniquement avec votre consentement. Google peut recevoir des données de navigation anonymisées pour améliorer la pertinence des publicités</li>
+                    <li><strong>Meta Pixel (Facebook/Instagram)</strong> — Pour le suivi des conversions et le reciblage publicitaire, uniquement avec votre consentement. Meta peut recevoir certaines données de navigation pour optimiser la diffusion de nos publicités</li>
+                </ul>
+                <p>Ces plateformes publicitaires agissent à titre de sous-traitants et sont tenues de respecter leurs propres politiques de confidentialité. Aucune donnée personnelle identifiable (nom, courriel, téléphone) n'est transmise à ces plateformes — uniquement des signaux de navigation agrégés et anonymisés.</p>
+                <div class="highlight-box">
+                    <div class="highlight-box-title">🎯 Utilisation à des fins publicitaires</div>
+                    <div class="highlight-box-text">Si vous avez interagi avec notre site, il est possible que vous voyiez des publicités Pouleo sur Google ou Meta (Facebook/Instagram). Ce reciblage est uniquement activé avec votre consentement et peut être désactivé en tout temps via les paramètres de confidentialité de ces plateformes.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="article">
+            <div class="article-num">Article 5</div>
+            <div class="article-title">Durée de conservation</div>
+            <div class="article-body">
+                <p>Vos données personnelles sont conservées pour une durée maximale de <strong>24 mois</strong> à compter de notre dernier échange. Passé ce délai, elles sont supprimées de manière sécurisée.</p>
+                <p>Si vous n'êtes pas devenu client de Pouleo à la suite de votre appel, vos données sont conservées pour une période de <strong>12 mois</strong> uniquement, puis supprimées automatiquement.</p>
+            </div>
+        </div>
+
+        <div class="article">
+            <div class="article-num">Article 6</div>
+            <div class="article-title">Vos droits — Loi 25 du Québec</div>
+            <div class="article-body">
+                <p>Conformément à la <strong>Loi sur la protection des renseignements personnels dans le secteur privé (Loi 25)</strong> du Québec, vous disposez des droits suivants :</p>
+                <ul>
+                    <li><strong>Droit d'accès</strong> — Vous pouvez demander à consulter toutes les informations que nous détenons sur vous</li>
+                    <li><strong>Droit de rectification</strong> — Vous pouvez demander la correction d'informations inexactes ou incomplètes</li>
+                    <li><strong>Droit à l'effacement</strong> — Vous pouvez demander la suppression de vos données personnelles</li>
+                    <li><strong>Droit à la portabilité</strong> — Vous pouvez demander à recevoir vos données dans un format structuré et lisible</li>
+                    <li><strong>Droit de retirer votre consentement</strong> — En tout temps, sans préjudice pour vous</li>
+                </ul>
+                <p>Pour exercer l'un de ces droits, contactez-nous à <a href="mailto:thomas@pouleo.com">thomas@pouleo.com</a>. Nous répondons dans un délai de <strong>30 jours</strong> suivant la réception de votre demande.</p>
+            </div>
+        </div>
+
+        <div class="article">
+            <div class="article-num">Article 7</div>
+            <div class="article-title">Cookies et technologies de suivi</div>
+            <div class="article-body">
+                <p>Notre site utilise plusieurs catégories de cookies et technologies de suivi :</p>
+                <ul>
+                    <li><strong>Cookies fonctionnels</strong> — Nécessaires au bon fonctionnement du site. Toujours actifs, aucun consentement requis</li>
+                    <li><strong>Cookies analytiques</strong> — Google Analytics collecte des données de navigation anonymisées (pages visitées, durée, appareil). Activés uniquement avec votre consentement</li>
+                    <li><strong>Cookies publicitaires</strong> — Google Ads (Google Tag) et Meta Pixel permettent le suivi des conversions et le reciblage publicitaire. Activés uniquement avec votre consentement explicite</li>
+                </ul>
+                <p>Vous pouvez modifier ou retirer votre consentement en tout temps en utilisant le lien de gestion des cookies en bas de page, ou en configurant les paramètres de votre navigateur.</p>
+                <div class="highlight-box">
+                    <div class="highlight-box-title">🍪 Votre choix est respecté</div>
+                    <div class="highlight-box-text">Si vous refusez les cookies publicitaires, aucune donnée n'est transmise à Google Ads ou Meta. Vous ne verrez pas de publicités ciblées de notre part liées à votre visite sur ce site. Le site reste pleinement fonctionnel dans tous les cas.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="article">
+            <div class="article-num">Article 8</div>
+            <div class="article-title">Sécurité de vos données</div>
+            <div class="article-body">
+                <p>Nous prenons la sécurité de vos informations au sérieux. Nos mesures incluent notamment :</p>
+                <ul>
+                    <li>Connexions chiffrées (HTTPS/TLS) sur l'ensemble de notre site</li>
+                    <li>Accès restreint aux données personnelles aux seules personnes autorisées</li>
+                    <li>Utilisation de services tiers réputés avec leurs propres politiques de sécurité</li>
+                </ul>
+                <p>En cas d'incident de confidentialité impliquant vos données, nous vous en informerons sans délai, conformément aux obligations de la Loi 25.</p>
+            </div>
+        </div>
+
+        <div class="article">
+            <div class="article-num">Article 9</div>
+            <div class="article-title">Témoignages, résultats et contenu client</div>
+            <div class="article-body">
+                <p>Dans le cadre de nos activités de marketing, il peut arriver que nous souhaitions utiliser les résultats obtenus pour un client (chiffres de performance, captures d'écran, études de cas) ou des témoignages à des fins promotionnelles, notamment sur notre site web ou dans nos publicités.</p>
+                <p><strong>Nous nous engageons à :</strong></p>
+                <ul>
+                    <li>Demander votre consentement écrit explicite <strong>avant</strong> toute utilisation de vos résultats, témoignages, nom d'entreprise ou image dans nos publicités ou communications</li>
+                    <li>Vous permettre de revoir et approuver tout contenu vous concernant avant publication</li>
+                    <li>Retirer immédiatement tout contenu sur simple demande de votre part</li>
+                    <li>Ne jamais utiliser vos données de performance à des fins publicitaires sans votre accord préalable</li>
+                </ul>
+                <div class="highlight-box">
+                    <div class="highlight-box-title">✍️ Consentement requis — Loi 25</div>
+                    <div class="highlight-box-text">Conformément à la Loi 25 du Québec, l'utilisation de renseignements personnels (nom, image, résultats identifiables) à des fins autres que celles pour lesquelles ils ont été collectés nécessite un consentement distinct et explicite. Ce consentement sera toujours demandé par écrit et pourra être retiré en tout temps.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="article">
+            <div class="article-num">Article 10</div>
+            <div class="article-title">Modifications de cette politique</div>
+            <div class="article-body">
+                <p>Pouleo se réserve le droit de modifier la présente politique en tout temps. Toute modification significative sera communiquée par courriel aux personnes dont nous détenons les coordonnées, ou affichée clairement sur cette page.</p>
+                <p>La date de dernière mise à jour est indiquée en haut de ce document.</p>
+            </div>
+        </div>
+            <div class="article-body">
+                <p>Pouleo se réserve le droit de modifier la présente politique en tout temps. Toute modification significative sera communiquée par courriel aux personnes dont nous détenons les coordonnées, ou affichée clairement sur cette page.</p>
+                <p>La date de dernière mise à jour est indiquée en haut de ce document.</p>
+            </div>
+        </div>
+
+        <div class="contact-card">
+            <div class="contact-card-info">
+                <strong>Une question sur vos données ?</strong>
+                Contactez notre responsable de la protection des renseignements personnels directement. Nous répondons sous 30 jours.
+            </div>
+            <a href="mailto:thomas@pouleo.com" class="contact-btn">Nous écrire →</a>
+        </div>
+
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- CONDITIONS D'UTILISATION                            -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div class="legal-section" id="conditions">
+
+        <div class="article">
+            <div class="article-num">Article 1</div>
+            <div class="article-title">Acceptation des conditions</div>
+            <div class="article-body">
+                <p>En accédant au site <strong>pouleo.com</strong> et en utilisant nos services, vous acceptez les présentes conditions d'utilisation dans leur intégralité. Si vous n'êtes pas en accord avec ces conditions, veuillez ne pas utiliser notre site.</p>
+                <p>Ces conditions s'appliquent à tous les visiteurs, utilisateurs et toute autre personne qui accède au site ou utilise les services de Pouleo.</p>
+            </div>
+        </div>
+
+        <div class="article">
+            <div class="article-num">Article 2</div>
+            <div class="article-title">Description des services</div>
+            <div class="article-body">
+                <p><strong>Pouleo</strong> est une agence de marketing numérique spécialisée dans le secteur de la construction. Nos services incluent notamment :</p>
+                <ul>
+                    <li>Gestion de campagnes publicitaires (Meta Ads, Google Ads)</li>
+                    <li>Création de stratégies de génération de leads qualifiés</li>
+                    <li>Conception de pages d'atterrissage et d'entonnoirs de conversion</li>
+                    <li>Rapports de performance et optimisation continue</li>
+                </ul>
+                <p>L'appel stratégique proposé sur ce site est un service consultatif gratuit, sans engagement d'aucune sorte.</p>
+            </div>
+        </div>
+
+        <div class="article">
+            <div class="article-num">Article 3</div>
+            <div class="article-title">Appel stratégique gratuit</div>
+            <div class="article-body">
+                <p>L'appel stratégique de 30 minutes offert via notre formulaire de réservation est entièrement gratuit et sans obligation. Lors de cet appel :</p>
+                <ul>
+                    <li>Nous analysons votre situation marketing actuelle</li>
+                    <li>Nous vous présentons des pistes de solutions adaptées à votre contexte</li>
+                    <li>Aucun engagement financier ou contractuel n'est attendu ou sollicité</li>
+                </ul>
+                <div class="highlight-box">
+                    <div class="highlight-box-title">📞 Confirmation de rendez-vous</div>
+                    <div class="highlight-box-text">En réservant un appel, vous vous engagez à honorer le rendez-vous ou à l'annuler avec un préavis d'au moins 24 heures via le lien fourni dans votre confirmation Calendly.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="article">
+            <div class="article-num">Article 4</div>
+            <div class="article-title">Propriété intellectuelle</div>
+            <div class="article-body">
+                <p>L'ensemble du contenu présent sur ce site — textes, images, logo, design, code source, structure — est la propriété exclusive de Pouleo et est protégé par les lois canadiennes et québécoises sur le droit d'auteur.</p>
+                <p>Toute reproduction, distribution ou utilisation commerciale du contenu de ce site sans autorisation écrite préalable de Pouleo est strictement interdite.</p>
+            </div>
+        </div>
+
+        <div class="article">
+            <div class="article-num">Article 5</div>
+            <div class="article-title">Limitation de responsabilité</div>
+            <div class="article-body">
+                <p>Les informations présentées sur ce site (statistiques, études de cas, résultats mentionnés) sont fournies à titre indicatif. Pouleo ne garantit pas des résultats identiques pour chaque client, les performances variant selon de nombreux facteurs propres à chaque entreprise.</p>
+                <p>Pouleo ne saurait être tenu responsable de tout dommage direct ou indirect résultant de l'utilisation ou de l'impossibilité d'utiliser ce site.</p>
+            </div>
+        </div>
+
+        <div class="article">
+            <div class="article-num">Article 6</div>
+            <div class="article-title">Liens vers des sites tiers</div>
+            <div class="article-body">
+                <p>Notre site peut contenir des liens vers des sites tiers (notamment Calendly). Ces liens sont fournis pour votre commodité. Pouleo n'exerce aucun contrôle sur le contenu de ces sites et décline toute responsabilité quant à leur contenu ou leurs pratiques de confidentialité.</p>
+            </div>
+        </div>
+
+        <div class="article">
+            <div class="article-num">Article 7</div>
+            <div class="article-title">Droit applicable et juridiction</div>
+            <div class="article-body">
+                <p>Les présentes conditions d'utilisation sont régies par les lois de la province de <strong>Québec</strong> et les lois fédérales du Canada qui s'y appliquent.</p>
+                <p>Tout litige découlant de l'utilisation de ce site ou de nos services sera soumis à la compétence exclusive des tribunaux du district judiciaire de Montréal, Québec.</p>
+            </div>
+        </div>
+
+        <div class="article">
+            <div class="article-num">Article 8</div>
+            <div class="article-title">Modifications des conditions</div>
+            <div class="article-body">
+                <p>Pouleo se réserve le droit de modifier les présentes conditions d'utilisation à tout moment. Les modifications prennent effet dès leur publication sur cette page. Nous vous encourageons à consulter régulièrement cette page.</p>
+                <p>L'utilisation continue de notre site après toute modification constitue votre acceptation des conditions révisées.</p>
+            </div>
+        </div>
+
+        <div class="contact-card">
+            <div class="contact-card-info">
+                <strong>Une question sur nos conditions ?</strong>
+                N'hésitez pas à nous écrire. Nous sommes transparents sur tout ce qui touche à notre fonctionnement.
+            </div>
+            <a href="mailto:thomas@pouleo.com" class="contact-btn">Nous écrire →</a>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-logo">
+        <img alt="Pouleo" src="assets/Design sans titre (6).svg" style="height:28px;display:block;">
+    </div>
+    <div class="footer-text">© 2025 Pouleo — Agence Marketing spécialisée Construction</div>
+    <div class="footer-text">Montréal, QC</div>
+</footer>
+
+<script>
+    // ─── CURSOR ───────────────────────────────────────────
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+    document.addEventListener('mousemove', e => {
+        mouseX = e.clientX; mouseY = e.clientY;
+        cursor.style.left = mouseX + 'px';
+        cursor.style.top = mouseY + 'px';
+    });
+    function animateRing() {
+        ringX += (mouseX - ringX) * 0.12;
+        ringY += (mouseY - ringY) * 0.12;
+        ring.style.left = ringX + 'px';
+        ring.style.top = ringY + 'px';
+        requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    document.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('mouseenter', () => { cursor.classList.add('hovered'); ring.classList.add('hovered'); });
+        el.addEventListener('mouseleave', () => { cursor.classList.remove('hovered'); ring.classList.remove('hovered'); });
+    });
+
+    // ─── NAV SCROLL ──────────────────────────────────────
+    window.addEventListener('scroll', () => {
+        document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // ─── TAB SWITCHING ───────────────────────────────────
+    function showSection(id, btn) {
+        document.querySelectorAll('.legal-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.toc-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        btn.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
