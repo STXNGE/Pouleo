@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /merci
+Disallow: /legal
+
+Sitemap: https://pouleo.com/sitemap.xml
